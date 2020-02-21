@@ -1,0 +1,120 @@
+    %%%%%%%% ICML 2020 EXAMPLE LATEX SUBMISSION FILE %%%%%%%%%%%%%%%%%
+
+\documentclass{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+
+% Recommended, but optional, packages for figures and better typesetting:
+
+% hyperref makes hyperlinks in the resulting PDF.
+% If your build breaks (sometimes temporarily if a hyperlink spans a page)
+% please comment out the following usepackage line and replace
+% \usepackage{icml2020} with \usepackage[nohyperref]{icml2020} above.
+\usepackage{hyperref}
+
+\usepackage{mathtools}
+
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{booktabs} % for professional tables
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{color}
+\usepackage{float}
+\usepackage{amsmath,stmaryrd,pict2e,picture}
+\usepackage{tcolorbox}
+% Attempt to make hyperref and algorithmic work together better:
+\newcommand{\theHalgorithm}{\arabic{algorithm}}
+
+\usepackage[colorinlistoftodos,bordercolor=orange,backgroundcolor=orange!20,linecolor=orange,textsize=scriptsize]{todonotes}
+
+\newcommand{\eqdef}{\coloneqq}
+
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+\newcommand{\Exp}[1]{{\mathbb E}\left[#1\right]}
+
+% some scripts
+
+
+% \newcommand{\sg}{\color{cyan} {\theta} \color{black}}
+% \newcommand{\tk}{\color{red} {\tau^k} \color{black}}
+% \newcommand{\lk}{\color{blue} {\mathcal L^k} \color{black}}
+
+
+\newcommand{\R}{\mathbb{R}^d}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\B}{\mathbb{B}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\sg}{{\sigma}}
+\newcommand{\tk}{{\tau^k}}
+\newcommand{\lk}{{\mathcal L^k}}
+\newcommand{\ee}{{\color{red}\epsilon \color{black}}}
+% \newcommand{\nm}{{\text{nom}_r}}
+% \newcommand{\dnm}{{\text{den}_r}}
+\newcommand{\nm}{{\mathcal A_r}}
+\newcommand{\dnm}{{\mathcal B_r}}
+
+
+
+\title{On Tight Uncertainty Principle for Biased Compressions}
+\author{Alyazeed Basyoni}
+\date{February 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+In this work, we aim to prove a tighter version of the Uncertainty Principle for communication complexity of a biased compression operator $\mathcal C \in \B(\alpha)$ for $\alpha < 1$. This is the the operators $\mathcal C : \R \to \R$ such that for any $x \in \R$, one has $\Exp{\norm{\mathcal C(x)-x}^2} \le \alpha \norm{x}^2$. The goal of this work is to analyze the difficulty of compressing operators in $\B(\alpha)$. In particular, we uncover a lower bound on the number of bits needed to communicate $\mathcal C(x)$, where $\mathcal C \in \B(\alpha)$. In addition, we show the tightness of this lower bound by designing an operator requiring very few bits of excess communication in expectation and with very high probability. We start off with the following lemma. 
+
+\begin{lemma} 
+If $\alpha < 1$ and $\mathcal C \in \B(\alpha)$ then $\mathcal C$ assumes infinitely many values.
+\end{lemma}
+
+Proof: Otherwise, assume the values are {$c_1, c_2, ..., c_N$}, one can choose x such that $\norm{x} < \frac{\min_i{\norm{c_i}}}{(\sqrt{\alpha}+1)}$ or $\norm{x} > \frac{\max_i{\norm{c_i}}}{(1-\sqrt{\alpha})}$ to ensure that for all i, one has $\norm{c_i-x} > \sqrt{\alpha}\norm{x}$, which is against that $\mathcal C \in \B(\alpha)$. \\
+
+From this, we can see that one needs to have an additional constrain on space where $\mathcal C$ is acting. Since it is easy to communicate $\norm{x}$ up to reasonable precision in finitely many bits, we can assume that $\norm{x} = 1$. In this case, we redefine $\B(\alpha)$ as the set of biased compression operators $\mathcal C : \R \to \R$ such that: \\
+$\Exp{\norm{\mathcal C(x)-x}^2} \le \alpha$ for all $x \in \R, \norm{x}=1$. Under this constrain, it is possible to ensure that $\mathcal C$ takes finitely many values, and hence can be communicated with finitely many bits. This leads us to our second and third lemmas.
+
+\begin{lemma}
+Assume that $\mathcal C$ takes only finitely many values $c_1,..., c_N$, then the spheres centered at $c_1,..., c_N$ with radii $\sqrt{\alpha}$ cover the boundary of the unit sphere completely.
+\end{lemma}
+Proof: Otherwise, let x be such that $\norm{x}=1$ and x is not covered by those spheres. Then $\norm{c_i-x} > \sqrt{\alpha}$ which is against that $\mathcal C \in \B(\alpha)$. 
+
+\begin{lemma}
+Let $c \in \R$, the ball centered at c with radius $\sqrt{\alpha}$ covers at most $P(\alpha)$ fraction of the surface of the unit sphere, where:\\ $P(\alpha) = Pr(x_1 \ge \sqrt{1-\alpha})$, where $(x_1, ..., x_d)$ is chosen uniformly at random on the unit sphere.
+\end{lemma}
+Proof: Without loss of generality, assume that $c = e_1$. In order to maximize the covered fraction of the unit sphere, one needs to maximize $\sup(\norm{v_1-v_2})$ where $v_!,v_2$ are on the unit sphere and within a radius of $\sqrt{\alpha}$ of c. Clearly, this quantity is bounded above by $2\sqrt{\alpha}$, and equality is achieve when c is the midpoint, in which case it is to check that 
+$\norm{c}=\sqrt{1-\alpha}$, or that $c = \sqrt{1-\alpha}e_1$. In this case, the fraction of the surface covered by the ball centered at c with radius $\sqrt{\alpha}$ is $P(\alpha) = Pr(x_1 >= \sqrt{1-\alpha})$ with $(x_!,..., x_d)$ chosen uniformly on the surface of the unit sphere. \\
+
+From all the above results, one can finally arrive at the following uncertainty principle: 
+
+\begin{lemma}
+Let $\mathcal C \in \B(\alpha)$. If $\mathcal C(x)$ can always be communicated in b bits, then one has that $2^bP(\alpha) \ge 1$
+\end{lemma}
+Proof: If one can encode $\mathcal C(x)$ with b bits, that means $\mathcal C(x)$ can assume at most $2^b$ values. Nonetheless, since the balls centered at these values with radii $\sqrt{\alpha}$ cover the surface of the unit sphere, and each one covers at most a small fraction of $P(\alpha)$, we must have $2^bP(\alpha) \ge 1$, as desired. \\
+
+Next, we show that this bound is tight.
+
+\begin{lemma}
+There exists a compression operator $\mathcal C \in \B(\alpha)$ along with a communication protocol such that the expected number of communicated bits b satisfies the following: \\
+1) $\Exp{b} \le 1+\log{\frac{1}{P(\alpha)}}$\\
+2) $\Exp{2^b} \le \frac{2}{P(\alpha)}$ \\
+3) $Pr(b \ge K + 1 + \log{\frac{1}{P(\alpha)}}) \le 2^{-k}$ for any $K \in \N$
+\end{lemma}
+
+Proof: Let $x \in \R$ such that $\norm{x}=1$. Let the compressing node do the following: keep generating point $c \in \R$ such that $\norm{c}=\sqrt{1-\alpha}$, uniformly at random, until $\norm{c-x} \le \sqrt{\alpha}$. Let $\tau$ be the stopping time for this experiment. The compressing node communicates $\tau$ to the server. The server starts from the same random seed as the compressing node (the random seed should be shared ahead of time), runs the same experiment $\tau$ times to arrive at the same c, which is, by definition, within $\sqrt{\alpha}$ of x. Since each ball centered at c with radius $\sqrt{\alpha}$ covers exactly $P(\alpha)$ fraction of the surface of the unit sphere, the probability that a random c contains x is $P(\alpha)$. Hence, the expected time to get c close enough to x is $\Exp{\tau}=\frac{1}{P(\alpha)}$. Since $\tau \le 2^b \le 2\tau$, we get $\Exp{2^b} \le \frac{2}{P(\alpha)}$. Moreover, since log is a concave function, we get: $\Exp{b} \le \Exp{\log{2\tau}} \le \log{\Exp{2\tau}} = \log{\frac{2}{P(\alpha)}} = 1+\log{\frac{1}{P(\alpha)}}$. Finally, the probability of sending K or more additional bits, $Pr(b \ge K + 1 + log(\frac{1}{P(\alpha)})) = Pr(2^b \ge \frac{2^{K+1}}{P(\alpha)}) \le Pr(2\tau \ge \frac{2^{K+1}}{P(\alpha)}) \le Pr(\tau \ge \frac{2^{K}}{P(\alpha)}) = Pr(\tau \ge 2^{K}\Exp{\tau})$ which, by Markov inequality, is bounded above by $2^{-k}$, as desired. 
+
+
+
+
+
+\end{document}
